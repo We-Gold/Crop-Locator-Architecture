@@ -1,0 +1,97 @@
+digraph Architecture {
+    node [shape=box]
+
+    {rank=same; "Source image upload" "Crop image upload"}
+
+    "Source image upload" -> "Analyze images"
+    "Crop image upload" -> "Analyze images"
+
+    "Source image upload" -> "Decode tiff"
+    "Crop image upload" -> "Decode tiff"
+
+    "Decode tiff" -> "Update images object"
+
+    "Update images object" -> "Images object"
+
+    {rank=same; "Images object" "Validate images"}
+
+    "Validate images" -> "Image error"
+
+    "Images object" -> "Validate images"
+    "Images object" -> "Search for crop"
+
+    "Analyze images" -> "Update DOM"
+
+    "Update DOM" -> "Validate images"
+
+    "Validate images" -> "Search for crop"
+
+    {rank=same; "Correct rotated image" "Crop image"}
+
+    "Search for crop" -> "Is image rotated"
+    "Is image rotated" -> "Correct rotated image"
+    "Search for crop" -> "Crop image"
+
+    "Correct rotated image" -> "Find crop in image"
+    "Crop image" -> "Find crop in image"
+
+    "Pipeline config" -> "Run pipeline"
+    "Find crop in image" -> "Run pipeline"
+    "Skip pixels" -> "Run pipeline"
+
+    "Run pipeline" -> "optimized scan"
+    "Check if the scan found anything" -> "Determine the best result"
+    "Check if the scan found anything" -> "No match found"
+
+    "optimized scan" -> "Run optimized scan"
+    "optimized scan" -> "find all close matches"
+    "convert position function" -> "find all close matches"
+    "threshold" -> "find all close matches"
+    "find all close matches" -> "Check if the scan found anything"
+
+    "find all close matches" -> "Threshold for crop to match" 
+    "Threshold for crop to match" -> "Find all matches under threshold"
+    "Find all matches under threshold" -> "Convert the matches to positions"
+    "Convert the matches to positions" -> "Check if the scan found anything"
+
+    "Determine the best result" -> "match scans"
+
+    "Run optimized scan" -> "Scanning kernel"
+    "Scanning kernel" -> "Run scanning kernel on each layer"
+
+    "Run scanning kernel on each layer" -> "find all close matches"
+
+    "match scans" -> "confirm matches"
+    "confirm matches" -> "match kernel"
+    "match kernel" -> "find all close matches"
+
+    "match scans" -> "update progress bar"
+    "optimized scan" -> "update progress bar"
+
+    "match scans" -> "Scan complete"
+
+    "Scan complete" -> "Not found"
+    "Not found" -> "Display the first layer of the source image"
+
+    "No match found" -> "Reslice image"
+    "Reslice image" -> "Search for crop"
+    "No match found" -> "There is no match"
+
+    "There is no match" -> "Scan complete"
+
+    "Scan complete" -> "Calculate the position of the crop"
+
+    "Calculate the position of the crop" -> "Check if the image is nested"
+    "Check if the image is nested" -> "Nested in previous image"
+    "Check if the image is nested" -> "Not nested"
+
+    "Nested in previous image" -> "Show crop overlay"
+
+    {rank=same; "Nested in previous image" "Not nested"}
+
+    "Not nested" -> "Display current layer of source image"
+    "Display current layer of source image" -> "Show crop overlay"
+
+    "Show crop overlay" -> "Output crop position in the interface"
+    "Output crop position in the interface" -> "Show crop on black background"
+}
