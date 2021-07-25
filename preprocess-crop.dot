@@ -1,0 +1,33 @@
+digraph PreprocessCrop {
+    node [shape=box]
+
+    "Crop" -> "Is the image rotated?"
+
+    "Is the image rotated?" -> "Preprocess rotated crop" [label="Yes"]
+    "Is the image rotated?" -> "Preprocess rotated crop" [label="(angle)"]
+
+    "Preprocess rotated crop" [style=bold]
+    "Preprocess normal crop" [style=bold]
+
+    "Is the image rotated?" -> "Preprocess normal crop" [label="No"]
+
+    "Preprocess rotated crop" -> "Store the first \nlayer of the crop"
+
+    "Store the first \nlayer of the crop"-> "Rotate the crop by \n-1 * angle"
+
+    "Rotate the crop by \n-1 * angle" -> "Crop a usable section \nfrom the newly straightened image"
+
+    final[label="Add attributes to the image object, \nand copy it to match the \nnumber of layers of the original image." style=bold]
+
+    "Crop a usable section \nfrom the newly straightened image" -> final
+
+    "Preprocess normal crop" -> "Take a crop of the current crop"
+
+    "Take a crop of the current crop" -> final
+
+    "Take a crop of the current crop" -> "Removes excess data \nand processing time"
+
+    "Removes excess data \nand processing time" [style=dotted]
+
+    final -> "Update the old crop \nto the new preprocessed crop \n(images object)"
+}

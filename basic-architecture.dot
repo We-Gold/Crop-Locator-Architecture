@@ -1,0 +1,16 @@
+digraph BasicArchitecture {
+    node [shape=box]
+
+    "On source image upload" -> "Update images object (stores the images)"
+    "On crop image upload" -> "Update images object (stores the images)"
+    
+    "Update images object (stores the images)" -> "Are the images valid?"
+
+    "Are the images valid?" -> "Show error and \n wait for another image" [label="No"]
+    "Are the images valid?" -> "Analyze the images" [label="Yes"]
+
+    "Analyze the images" -> "Match found?"
+
+    "Match found?" -> "Show error and \n wait for another image" [label="No"]
+    "Match found?" -> "Output the crop's location \n and transformation data" [label="Yes"]
+}

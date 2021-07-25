@@ -1,0 +1,27 @@
+digraph AnalyzingImages {
+    node [shape=box]
+
+    "Images object (contains source and crop images)" -> "Search for crop"
+    
+    "Search for crop" -> "3 scans (completes if one finds the crop)"
+
+    "3 scans (completes if one finds the crop)" -> "1) Default scan"
+    "3 scans (completes if one finds the crop)" -> "2) Top axis scan"
+    "3 scans (completes if one finds the crop)" -> "3) Left axis scan"
+
+    {rank=same; "1) Default scan" "2) Top axis scan" "3) Left axis scan"}
+
+    "1) Default scan" -> "Preprocess the crop"
+
+    "Preprocess the crop" -> "Scan the source image for the crop"
+
+    "2) Top axis scan" -> "Reslice image from the top axis"
+
+    "Reslice image from the top axis" -> "Preprocess the crop"
+
+    "3) Left axis scan" -> "Reslice image from the left axis"
+
+    "Reslice image from the left axis" -> "Preprocess the crop"
+
+    "Scan the source image for the crop" -> "Return whether or not \nthe crop has been located"
+}
